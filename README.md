@@ -63,7 +63,7 @@ The implementation of the **Gujarat Startups & Innovation Platform** is expected
 
 The **Gujarat Startups & Innovation Platform** aims to create a more efficient, transparent, and supportive environment for research, IPR management, innovation, and start-up growth in Gujarat. By addressing the current challenges and leveraging modern technology, the platform will significantly enhance the state's capacity to foster and sustain innovation and entrepreneurship.
 
----
+
 If you have any questions or need further details, please reach out to the development team @ krishnarothe103@gmail.com or pateldhruvin452@gmail.com 
 
----
+
