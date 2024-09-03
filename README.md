@@ -65,4 +65,5 @@ The **Gujarat Startups & Innovation Platform** aims to create a more efficient, 
 
 ---
 If you have any questions or need further details, please reach out to the development team @ krishnarothe103@gmail.com or pateldhruvin452@gmail.com 
+
 ---
