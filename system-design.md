@@ -8,7 +8,7 @@ Welcome to the **Gujarat Startups & Innovation Platform (GSIP)** project documen
 
 The System Architecture Diagram provides an overview of the entire platform's structure, showing how different components and services interact with each other.
 
-![System Architecture Diagram](path/to/system_architecture.png)
+![System Architecture Diagram](Documentation/Diagrams/system-architecture.png)
 
 *Figure 1: System Architecture Diagram*
 
@@ -58,16 +58,6 @@ This flowchart details the process a startup undergoes when submitting a funding
 
 ### **Scenario: Research Project Submission and Funding Request**
 
-**Actors:**
-
-- **Researchers & Academics**
-- **Startups**
-- **IPR Professionals**
-- **Investors**
-- **Mentors**
-- **Incubation Centers**
-- **System**
-
 **Description:**
 
 1. **Researchers & Academics** submit a research project proposal.
@@ -78,18 +68,11 @@ This flowchart details the process a startup undergoes when submitting a funding
 6. **IPR Professionals** manage any related intellectual property rights.
 7. **System** updates the project status and sends notifications.
 
-![Research Project Sequence Diagram](path/to/research_project_sequence.png)
+![Research Project Sequence Diagram](Documentation/Diagrams/research_project.png)
 
 *Figure 6: Research Project Submission and Funding Request Sequence Diagram*
 
 ### **Scenario: Funding Request from a Startup**
-
-**Actors:**
-
-- **Startups**
-- **Investors**
-- **Incubation Centers**
-- **System**
 
 **Description:**
 
@@ -99,18 +82,11 @@ This flowchart details the process a startup undergoes when submitting a funding
 4. **Incubation Centers** provide additional resources or support.
 5. **System** updates the funding status and sends notifications.
 
-![Funding Request Sequence Diagram](path/to/funding_request_sequence.png)
+![Funding Request Sequence Diagram](Documentation/Diagrams/start_sequence.png)
 
 *Figure 7: Funding Request Sequence Diagram*
 
 ### **Scenario: IPR Management**
-
-**Actors:**
-
-- **IPR Professionals**
-- **Researchers & Academics**
-- **Startups**
-- **System**
 
 **Description:**
 
@@ -119,7 +95,7 @@ This flowchart details the process a startup undergoes when submitting a funding
 3. **IPR Professionals** review and manage the application.
 4. **System** updates the status and notifies the applicant.
 
-![IPR Management Sequence Diagram](path/to/ipr_management_sequence.png)
+![IPR Management Sequence Diagram](Documentation/Diagrams/IPR_management.png)
 
 *Figure 8: IPR Management Sequence Diagram*
 
