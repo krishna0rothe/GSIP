@@ -107,7 +107,7 @@ As the project evolves, additional diagrams and visual aids will be added here t
 
 ---
 
-Feel free to navigate through these diagrams to get a better understanding of the GSIP platform's architecture and processes. If you have any questions or need further details, please reach out to the development team @krishnarothe103@gmail.com
+Feel free to navigate through these diagrams to get a better understanding of the GSIP platform's architecture and processes. If you have any questions or need further details, please reach out to the development team @krishnarothe103@gmail.com , pateldhruvin452@gmail.com
 
 ---
 
