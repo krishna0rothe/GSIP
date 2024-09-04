@@ -1,17 +1,20 @@
 // src/routes/authRoutes.js
 const express = require("express");
 const router = express.Router();
+const authController = require("../controllers/authController");
+const authMiddleware = require("../middlewares/authMiddleware");
 
-// Define routes
-router.post("/login", (req, res) => {
-  // Login logic here
-  res.send("Login route");
-});
+router.post(
+  "/register",
+  authController.registerUser
+);
 
-router.post("/signup", (req, res) => {
-  // Signup logic here
-  res.send("Signup route");
-});
+
+// Route for user login
+router.post('/login', authController.loginUser);
+
+// Get user details route (Protected)
+router.get('/me', authMiddleware, authController.getUserDetails);
 
 // Export the router
 module.exports = router;

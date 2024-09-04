@@ -20,7 +20,7 @@ const authRoutes = require("./routes/authRoutes");
 
 
 // Use routes
-//app.use("/api/auth", authRoutes);
+app.use("/api/auth", authRoutes);
 
 // Error handling middleware
 app.use((err, req, res, next) => {
