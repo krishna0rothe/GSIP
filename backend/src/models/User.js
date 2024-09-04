@@ -2,6 +2,8 @@ const mongoose = require("mongoose");
 const bcrypt = require("bcryptjs");
 const Schema = mongoose.Schema;
 
+
+
 // Define the User Schema
 const userSchema = new Schema(
   {
@@ -61,8 +63,34 @@ const userSchema = new Schema(
       match: /^[0-9]{10}$/, // Example regex
     },
     address: {
+      state: {
+        type: String,
+        required: true,
+      },
+      district: {
+        type: String,
+        required: true,
+      },
+      city: {
+        type: String,
+        required: true,
+      },
+      pincode: {
+        type: String,
+        required: true,
+        match: /^[1-9][0-9]{5}$/, // Indian pincode format
+      },
+    },
+    uniqueIdType: {
       type: String,
-      trim: true,
+      enum: ["Aadhar Card", "PAN Card", "Passport"],
+      required: true,
+    },
+    uniqueIdNumber: {
+      type: String,
+      required: true,
+      unique: true,
+      match: /^\d{15}$/, // 15-digit number validation
     },
     dateOfBirth: {
       type: Date,
@@ -76,7 +104,7 @@ const userSchema = new Schema(
     },
   },
   { timestamps: true }
-); // Add createdAt and updatedAt fields
+); // Adds createdAt and updatedAt fields
 
 // Hash password before saving
 userSchema.pre("save", async function (next) {
