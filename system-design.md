@@ -14,45 +14,6 @@ The System Architecture Diagram provides an overview of the entire platform's st
 
 ---
 
-## 🔄 Data Flow Diagrams (DFD)
-
-### Context-Level DFD (Level 0)
-
-The Context-Level DFD gives a high-level view of the system, showing how external entities interact with the main system.
-
-![Context-Level DFD](path/to/context_level_dfd.png)
-
-*Figure 2: Context-Level DFD (Level 0)*
-
-### Level 1 DFD
-
-This diagram breaks down the main process into sub-processes, providing a more detailed view of the data flow within the system.
-
-![Level 1 DFD](path/to/level_1_dfd.png)
-
-*Figure 3: Level 1 DFD*
-
----
-
-## 🛠️ Workflow and Process Flowcharts
-
-### Research Project Submission Flow
-
-This flowchart illustrates the step-by-step process of submitting a research project proposal, from submission to review and support.
-
-![Research Project Submission Flow](path/to/research_project_flow.png)
-
-*Figure 4: Research Project Submission Flowchart*
-
-### Funding Request Flow
-
-This flowchart details the process a startup undergoes when submitting a funding request, including review and support stages.
-
-![Funding Request Flow](path/to/funding_request_flow.png)
-
-*Figure 5: Funding Request Flowchart*
-
----
 
 ## 🔄 Sequence Diagrams
 
