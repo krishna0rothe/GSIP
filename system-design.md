@@ -8,65 +8,16 @@ Welcome to the **Gujarat Startups & Innovation Platform (GSIP)** project documen
 
 The System Architecture Diagram provides an overview of the entire platform's structure, showing how different components and services interact with each other.
 
-![System Architecture Diagram](path/to/system_architecture.png)
+![System Architecture Diagram](Documentation/Diagrams/system-architecture.png)
 
 *Figure 1: System Architecture Diagram*
 
 ---
 
-## 🔄 Data Flow Diagrams (DFD)
-
-### Context-Level DFD (Level 0)
-
-The Context-Level DFD gives a high-level view of the system, showing how external entities interact with the main system.
-
-![Context-Level DFD](path/to/context_level_dfd.png)
-
-*Figure 2: Context-Level DFD (Level 0)*
-
-### Level 1 DFD
-
-This diagram breaks down the main process into sub-processes, providing a more detailed view of the data flow within the system.
-
-![Level 1 DFD](path/to/level_1_dfd.png)
-
-*Figure 3: Level 1 DFD*
-
----
-
-## 🛠️ Workflow and Process Flowcharts
-
-### Research Project Submission Flow
-
-This flowchart illustrates the step-by-step process of submitting a research project proposal, from submission to review and support.
-
-![Research Project Submission Flow](path/to/research_project_flow.png)
-
-*Figure 4: Research Project Submission Flowchart*
-
-### Funding Request Flow
-
-This flowchart details the process a startup undergoes when submitting a funding request, including review and support stages.
-
-![Funding Request Flow](path/to/funding_request_flow.png)
-
-*Figure 5: Funding Request Flowchart*
-
----
 
 ## 🔄 Sequence Diagrams
 
 ### **Scenario: Research Project Submission and Funding Request**
-
-**Actors:**
-
-- **Researchers & Academics**
-- **Startups**
-- **IPR Professionals**
-- **Investors**
-- **Mentors**
-- **Incubation Centers**
-- **System**
 
 **Description:**
 
@@ -78,18 +29,11 @@ This flowchart details the process a startup undergoes when submitting a funding
 6. **IPR Professionals** manage any related intellectual property rights.
 7. **System** updates the project status and sends notifications.
 
-![Research Project Sequence Diagram](path/to/research_project_sequence.png)
+![Research Project Sequence Diagram](Documentation/Diagrams/research_project.png)
 
 *Figure 6: Research Project Submission and Funding Request Sequence Diagram*
 
 ### **Scenario: Funding Request from a Startup**
-
-**Actors:**
-
-- **Startups**
-- **Investors**
-- **Incubation Centers**
-- **System**
 
 **Description:**
 
@@ -99,18 +43,11 @@ This flowchart details the process a startup undergoes when submitting a funding
 4. **Incubation Centers** provide additional resources or support.
 5. **System** updates the funding status and sends notifications.
 
-![Funding Request Sequence Diagram](path/to/funding_request_sequence.png)
+![Funding Request Sequence Diagram](Documentation/Diagrams/start_sequence.png)
 
 *Figure 7: Funding Request Sequence Diagram*
 
 ### **Scenario: IPR Management**
-
-**Actors:**
-
-- **IPR Professionals**
-- **Researchers & Academics**
-- **Startups**
-- **System**
 
 **Description:**
 
@@ -119,7 +56,7 @@ This flowchart details the process a startup undergoes when submitting a funding
 3. **IPR Professionals** review and manage the application.
 4. **System** updates the status and notifies the applicant.
 
-![IPR Management Sequence Diagram](path/to/ipr_management_sequence.png)
+![IPR Management Sequence Diagram](Documentation/Diagrams/IPR_management.png)
 
 *Figure 8: IPR Management Sequence Diagram*
 
@@ -131,8 +68,8 @@ As the project evolves, additional diagrams and visual aids will be added here t
 
 ---
 
-Feel free to navigate through these diagrams to get a better understanding of the GSIP platform's architecture and processes. If you have any questions or need further details, please reach out to the development team.
+Feel free to navigate through these diagrams to get a better understanding of the GSIP platform's architecture and processes. If you have any questions or need further details, please reach out to the development team @ krishnarothe103@gmail.com or pateldhruvin452@gmail.com 
 
 ---
 
-**Note:** Replace the `path/to/your_image.png` with the actual relative paths to your uploaded images in the GitHub repository.
+
