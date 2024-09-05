@@ -80,7 +80,12 @@ const startupSchema = new Schema(
     },
     interests: {
       type: [String],
-      enum: ["Mentorship", "Funding", "Incubation Support"],
+      enum: ["Mentorship", "Funding", "Incubation Support", "Other startups"],
+    },
+    user: {
+      type: Schema.Types.ObjectId,
+      ref: "User", // Reference to the User model
+      required: true,
     },
   },
   { timestamps: true }

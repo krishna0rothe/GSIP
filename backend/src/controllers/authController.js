@@ -2,11 +2,12 @@ const User = require("../models/User");
 const jwt = require("jsonwebtoken");
 const { validationResult } = require("express-validator");
 
-// Helper function to generate JWT token
 const generateToken = (user) => {
-  return jwt.sign({ id: user._id, role: user.role }, process.env.JWT_SECRET, {
-    expiresIn: "1h",
-  });
+  return jwt.sign(
+    { id: user._id, role: user.role }, // Payload
+    process.env.JWT_SECRET, // Secret key
+    { expiresIn: "1h" } // Token expiration
+  );
 };
 
 
