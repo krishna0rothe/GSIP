@@ -18,11 +18,13 @@ app.use(cors()); // Enable CORS
 // Import routes
 const authRoutes = require("./routes/authRoutes");
 const startupRoutes = require("./routes/startupRoutes");
+const researchRoutes = require("./routes/researchRoutes");
 
 
 // Use routes
 app.use("/api/auth", authRoutes);
 app.use("/api/startups", startupRoutes);
+app.use("/api/research", researchRoutes);
 
 // Error handling middleware
 app.use((err, req, res, next) => {
