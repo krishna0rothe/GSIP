@@ -5,6 +5,7 @@ import Register from "./pages/auth/Register";
 import Home from "./pages/home/HomePage";
 import NotFound from "./pages/notfound/NotFound";
 
+
 const AppRoutes = () => {
   return (
     <BrowserRouter>
