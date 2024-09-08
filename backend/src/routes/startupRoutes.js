@@ -16,7 +16,6 @@ router.get("/:id", authMiddleware, startupController.getStartupById);
 
 
 
-
 // Management routes 
 
 // Approve a startup

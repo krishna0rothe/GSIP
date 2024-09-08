@@ -98,6 +98,18 @@ const ResearchSchema = new Schema({
     ref: "User",
     required: true, // Add reference to the user who created the research
   },
+  approvalStatus: {
+    type: String,
+    enum: ["pending", "approved", "rejected"],  
+    default: "pending",
+  },
+  approvedBy: {
+    type: Schema.Types.ObjectId,
+    ref: "User", // Reference to the User who approved it
+  },
+  approvedAt: {
+    type: Date,
+  },
 });
 
 const Research = mongoose.model("Research", ResearchSchema);
