@@ -4,7 +4,7 @@ import Login from "./pages/auth/Login";
 import Register from "./pages/auth/Register";
 import Home from "./pages/home/HomePage";
 import NotFound from "./pages/notfound/NotFound";
-
+import StartupApprovalPage from "./pages/Dashboard/StartupApprovalPage";
 
 const AppRoutes = () => {
   return (
@@ -14,6 +14,7 @@ const AppRoutes = () => {
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
         <Route path="*" element={<NotFound />} />
+        <Route path="/startups/approval" element={<StartupApprovalPage />} />
       </Routes>
     </BrowserRouter>
   );

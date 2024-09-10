@@ -9,7 +9,7 @@ const startupApprovalController = require("../controllers/startup/startupApprova
 router.post("/register", authMiddleware , startupController.registerStartup);
 
 // Route to get all startups
-router.get("/", authMiddleware, startupController.getAllStartups);
+router.get("/", startupController.getAllStartups);
 
 // Route to get a startup by ID
 router.get("/:id", authMiddleware, startupController.getStartupById);

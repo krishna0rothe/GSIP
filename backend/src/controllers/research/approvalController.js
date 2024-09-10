@@ -11,7 +11,6 @@ exports.approveResearch = async (req, res) => {
     if (!research) {
       return res.status(404).json({ message: "Research not found" });
     }
-
     // Update the approval status, approvedBy, and approvedAt fields
     research.approvalStatus = status;
     if (status === "approved") {
