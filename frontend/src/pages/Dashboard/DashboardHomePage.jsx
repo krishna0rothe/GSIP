@@ -1,177 +1,170 @@
 import React, { useEffect, useState } from "react";
-import { Box, Typography, Grid, Card, CardContent, Chip, Button } from "@mui/material";
-import { Line } from "react-chartjs-2";
-import axios from "axios";
-import apiConfig from "../../config/apiConfig";
 import {
-  Chart as ChartJS,
-  CategoryScale,
-  LinearScale,
-  PointElement,
-  LineElement,
-  Title,
+  Box,
+  Typography,
+  Grid,
+  Card,
+  CardContent,
+  Chip,
+  Avatar,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+  Paper,
+} from "@mui/material";
+import {
+  LineChart,
+  Line,
+  XAxis,
+  YAxis,
+  CartesianGrid,
   Tooltip,
-  Legend
-} from 'chart.js';
+  Legend,
+  ResponsiveContainer,
+} from "recharts";
 
-// Register chart.js components
-ChartJS.register(
-  CategoryScale,
-  LinearScale,
-  PointElement,
-  LineElement,
-  Title,
-  Tooltip,
-  Legend
-);
-
-// Status colors for tags
 const statusColors = {
   Approved: "success",
   Pending: "warning",
   Rejected: "error",
 };
 
-const DashboardHomePage = () => {
+const apiBaseURL = "http://localhost:5000/api"; // Your actual API base URL
+
+export default function DashboardHomePage() {
   const [startups, setStartups] = useState([]);
-  const [approvedCount, setApprovedCount] = useState(0);
-  const [pendingCount, setPendingCount] = useState(0);
-  const [rejectedCount, setRejectedCount] = useState(0);
+  const [stats] = useState({
+    startupCount: 10,
+    researchCount: 5,
+    mentorCount: 12,
+    fundingRaised: "₹2 Crore",
+  });
+  const [chartData] = useState([
+    { month: "January", startups: 2, researchProjects: 1, fundingRaised: 100000 },
+    { month: "February", startups: 3, researchProjects: 2, fundingRaised: 150000 },
+    { month: "March", startups: 4, researchProjects: 3, fundingRaised: 200000 },
+    { month: "April", startups: 6, researchProjects: 4, fundingRaised: 300000 },
+    { month: "May", startups: 8, researchProjects: 5, fundingRaised: 500000 },
+    { month: "June", startups: 9, researchProjects: 6, fundingRaised: 750000 },
+    { month: "July", startups: 11, researchProjects: 7, fundingRaised: 1000000 },
+    { month: "August", startups: 14, researchProjects: 8, fundingRaised: 1250000 },
+    { month: "September", startups: 16, researchProjects: 10, fundingRaised: 2000000 },
+    // Add more dummy month-wise data if needed
+  ]);
 
-  // Dummy data for the cards
-  const startupCount = 10;
-  const researchCount = 7;
-  const mentorCount = 15;
-  const fundingRaised = "₹2 Cr";
-
-  // Dummy data for the graph
-  const lineChartData = {
-    labels: ["Jan", "Feb", "Mar", "Apr", "May", "Jun"],
-    datasets: [
-      {
-        label: "Startups Approved",
-        data: [2, 3, 1, 4, 6, 5],
-        borderColor: "#3f51b5",
-        fill: false,
-      },
-    ],
-  };
-
-  // Fetch startups from the API
   useEffect(() => {
-    axios.get(`${apiConfig.baseURL}/api/startups/`)
-      .then((response) => {
-        const fetchedStartups = response.data;
-        setStartups(fetchedStartups.slice(0, 5)); // Show latest 5 startups
-        calculateStatusCounts(fetchedStartups);
-      })
-      .catch((error) => {
-        console.error("Error fetching startup data:", error);
-      });
+    const fetchData = async () => {
+      try {
+        const startupsResponse = await fetch(`${apiBaseURL}/startups`);
+        if (!startupsResponse.ok) {
+          throw new Error("Network response was not ok");
+        }
+        const startupsData = await startupsResponse.json();
+        setStartups(startupsData.slice(0, 5)); // Show the first 5 startups
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    };
+    fetchData();
   }, []);
 
-  // Calculate the counts for each status
-  const calculateStatusCounts = (startups) => {
-    const approved = startups.filter((s) => s.status === "Approved").length;
-    const pending = startups.filter((s) => s.status === "Pending").length;
-    const rejected = startups.filter((s) => s.status === "Rejected").length;
-    setApprovedCount(approved);
-    setPendingCount(pending);
-    setRejectedCount(rejected);
-  };
-
   return (
-    <Box sx={{ padding: "10px", maxWidth: "100%", overflow: "hidden" }}>
+    <Box sx={{ padding: "20px", maxWidth: "100%", overflow: "hidden" }}>
       {/* Top Cards */}
       <Grid container spacing={3} sx={{ marginBottom: "20px" }}>
-        <Grid item xs={12} sm={3}>
-          <Card>
+        <Grid item xs={12} sm={6} md={3}>
+          <Card sx={{ backgroundColor: "#f0f4c3" }}> {/* Light Green */}
             <CardContent>
-              <Typography variant="h5">Startups</Typography>
-              <Typography variant="h3">{startupCount}</Typography>
+              <Typography variant="h6" gutterBottom>Startups</Typography>
+              <Typography variant="h4">{stats.startupCount}</Typography>
             </CardContent>
           </Card>
         </Grid>
-        <Grid item xs={12} sm={3}>
-          <Card>
+        <Grid item xs={12} sm={6} md={3}>
+          <Card sx={{ backgroundColor: "#bbdefb" }}> {/* Light Blue */}
             <CardContent>
-              <Typography variant="h5">Research Projects</Typography>
-              <Typography variant="h3">{researchCount}</Typography>
+              <Typography variant="h6" gutterBottom>Research Projects</Typography>
+              <Typography variant="h4">{stats.researchCount}</Typography>
             </CardContent>
           </Card>
         </Grid>
-        <Grid item xs={12} sm={3}>
-          <Card>
+        <Grid item xs={12} sm={6} md={3}>
+          <Card sx={{ backgroundColor: "#ffcdd2" }}> {/* Light Red */}
             <CardContent>
-              <Typography variant="h5">Mentors</Typography>
-              <Typography variant="h3">{mentorCount}</Typography>
+              <Typography variant="h6" gutterBottom>Mentors</Typography>
+              <Typography variant="h4">{stats.mentorCount}</Typography>
             </CardContent>
           </Card>
         </Grid>
-        <Grid item xs={12} sm={3}>
-          <Card>
+        <Grid item xs={12} sm={6} md={3}>
+          <Card sx={{ backgroundColor: "#d1c4e9" }}> {/* Light Purple */}
             <CardContent>
-              <Typography variant="h5">Funding Raised</Typography>
-              <Typography variant="h3">{fundingRaised}</Typography>
+              <Typography variant="h6" gutterBottom>Funding Raised</Typography>
+              <Typography variant="h4">{stats.fundingRaised}</Typography>
             </CardContent>
           </Card>
         </Grid>
       </Grid>
 
-      {/* Line Graph */}
-      <Box sx={{ marginBottom: "20px", height: "200px" }}>
-        <Line data={lineChartData} />
-      </Box>
+      {/* Line Chart */}
+      <Card sx={{ marginBottom: "20px" }}>
+        <CardContent>
+          <Typography variant="h6" gutterBottom>Monthly Progress - Startups, Research Projects, and Funding</Typography>
+          <ResponsiveContainer width="100%" height={300}>
+            <LineChart data={chartData}>
+              <CartesianGrid strokeDasharray="3 3" />
+              <XAxis dataKey="month" />
+              <YAxis yAxisId="left" />
+              <YAxis yAxisId="right" orientation="right" />
+              <Tooltip />
+              <Legend />
+              <Line yAxisId="left" type="monotone" dataKey="startups" stroke="#8884d8" name="Startups" />
+              <Line yAxisId="left" type="monotone" dataKey="researchProjects" stroke="#82ca9d" name="Research Projects" />
+              <Line yAxisId="right" type="monotone" dataKey="fundingRaised" stroke="#ffc658" name="Funding Raised (₹)" />
+            </LineChart>
+          </ResponsiveContainer>
+        </CardContent>
+      </Card>
 
-      {/* Latest Startups List */}  
-      <Box sx={{ borderRadius: "5px", padding: "15px", backgroundColor: "#fff", boxShadow: 1 }}>
-        <Typography variant="h6" gutterBottom>
-          Latest Startup Approvals
-        </Typography>
-        {startups.map((startup) => (
-          <Box
-            key={startup._id}
-            sx={{
-              display: "flex",
-              justifyContent: "space-between",
-              alignItems: "center",
-              borderBottom: "1px solid #eee",
-              padding: "10px 0",
-            }}
-          >
-            {/* Startup Information */}
-            <Box>
-              <Typography variant="h6">{startup.startupName}</Typography>
-              <Typography variant="caption" color="textSecondary">
-                {startup.createdAt.substring(0, 10)}
-              </Typography>
-            </Box>
-
-            {/* Stage and Status */}
-            <Box sx={{ display: "flex", alignItems: "center" }}>
-              <Chip label={startup.stage} size="small" sx={{ marginRight: "10px" }} />
-              <Chip
-                label={startup.status}
-                color={statusColors[startup.status]}
-                size="small"
-                sx={{ marginRight: "20px" }}
-              />
-            </Box>
-
-            {/* Action Buttons */}
-            <Box>
-              <Button variant="outlined" size="small" color="success" sx={{ marginRight: "10px" }}>
-                Approve
-              </Button>
-              <Button variant="outlined" size="small" color="error">
-                Reject
-              </Button>
-            </Box>
-          </Box>
-        ))}
-      </Box>
+      {/* Latest Startups Table */}
+      <Card>
+        <CardContent>
+          <Typography variant="h6" gutterBottom>Latest Startups</Typography>
+          <TableContainer component={Paper}>
+            <Table sx={{ minWidth: 650 }} aria-label="startup table">
+              <TableHead>
+                <TableRow>
+                  <TableCell>Logo</TableCell>
+                  <TableCell>Name</TableCell>
+                  <TableCell>Date Created</TableCell>
+                  <TableCell>Industry</TableCell>
+                  <TableCell>Stage</TableCell>
+                  <TableCell>Status</TableCell>
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                {startups.map((startup) => (
+                  <TableRow key={startup._id}>
+                    <TableCell>
+                      <Avatar src={startup.logo || "/placeholder.svg"} alt={startup.startupName} />
+                    </TableCell>
+                    <TableCell>{startup.startupName}</TableCell>
+                    <TableCell>{new Date(startup.createdAt).toLocaleDateString()}</TableCell>
+                    <TableCell>{startup.industry}</TableCell>
+                    <TableCell>{startup.stage}</TableCell>
+                    <TableCell>
+                      <Chip label={startup.status} color={statusColors[startup.status]} size="small" />
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </TableContainer>
+        </CardContent>
+      </Card>
     </Box>
   );
-};
-
-export default DashboardHomePage;
+}

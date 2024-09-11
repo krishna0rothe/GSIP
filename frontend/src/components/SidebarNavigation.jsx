@@ -1,12 +1,12 @@
 import React from "react";
-import { Box, Typography, List, ListItem, ListItemIcon, ListItemText, CssBaseline } from "@mui/material";
+import { Box, List, ListItem, ListItemIcon, ListItemText, CssBaseline } from "@mui/material";
 import { Home as HomeIcon, Assignment as AssignmentIcon, BarChart as BarChartIcon, People as PeopleIcon, Settings as SettingsIcon } from "@mui/icons-material";
 import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
 import StartupApprovalPage from "../pages/Dashboard/StartupApprovalPage.jsx"  // Your startup approval page component
 import DashboardHomePage from "../pages/Dashboard/DashboardHomePage.jsx";
 
 const SidebarNavigation = () => {
-  const menuItems = [ 
+  const menuItems = [
     { text: "Dashboard", icon: <HomeIcon />, path: "/" },
     { text: "Startup Approvals", icon: <AssignmentIcon />, path: "/startups/approval" },
     { text: "Resource Management", icon: <BarChartIcon />, path: "/resource-management" },
@@ -29,6 +29,7 @@ const SidebarNavigation = () => {
             height: "100vh",
             backgroundColor: "white",
             borderRight: "1px solid #e0e0e0",
+            //position: "fixed",  // Sidebar fixed position
           }}
         >
           <List>
