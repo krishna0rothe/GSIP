@@ -87,6 +87,21 @@ const startupSchema = new Schema(
       ref: "User", // Reference to the User model
       required: true,
     },
+    status: {
+      type: String,
+      enum: ["Pending", "Approved", "Rejected"],
+      default: "Pending",
+    },
+    feedback: {
+      type: String,
+    },
+    dateApproved: {
+      type: Date,
+    },
+    approvedBy: {
+      type: Schema.Types.ObjectId,
+      ref: "User", // Policy maker or admin
+    },
   },
   { timestamps: true }
 );

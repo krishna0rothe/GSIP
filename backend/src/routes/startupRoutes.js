@@ -18,11 +18,11 @@ router.get("/:id", authMiddleware, startupController.getStartupById);
 
 // Management routes 
 
-// Approve a startup
-router.post('/approve', authMiddleware, policyMakerMiddleware, startupApprovalController.approveStartup);
+// Route to approve or reject a startup (Admin/Policymaker)
+router.patch("/startups/approve/:id", startupApprovalController.approveOrRejectStartup);
 
 // Reject a startup
-router.post('/reject', authMiddleware, policyMakerMiddleware, startupApprovalController.rejectStartup);
+//router.post('/reject', authMiddleware, policyMakerMiddleware, startupApprovalController.rejectStartup);
 
 // Get all approvals for a startup
 router.get('/:startupId/approvals', authMiddleware, policyMakerMiddleware, startupApprovalController.getApprovalsForStartup);

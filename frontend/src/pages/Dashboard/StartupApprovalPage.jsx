@@ -1,8 +1,14 @@
 import React, { useEffect, useState } from "react";
-import { Box, Typography, Grid, Card, CardContent, Button, Chip } from "@mui/material";
+import { Box, Typography, Grid, Card, CardContent, Button, Chip, Dialog, DialogTitle, DialogContent, IconButton } from "@mui/material";
+import CloseIcon from "@mui/icons-material/Close";
+import BusinessIcon from "@mui/icons-material/Business";
+import EmailIcon from "@mui/icons-material/Email";
+import PhoneIcon from "@mui/icons-material/Phone";
+import WebIcon from "@mui/icons-material/Web";
+import AppIcon from "@mui/icons-material/Apps";
+import DefaultLogo from "./user.svg"; // Placeholder icon
 import apiConfig from "../../config/apiConfig";
 import axios from "axios";
-
 
 // Status colors for tags
 const statusColors = {
@@ -11,11 +17,65 @@ const statusColors = {
   Rejected: "error",
 };
 
+// Popup Component
+const StartupDetailsPopup = ({ open, onClose, startup }) => {
+  if (!startup) return null;
+
+  return (
+    <Dialog open={open} onClose={onClose} fullWidth>
+      <DialogTitle>
+        {startup.startupName}
+        <IconButton
+          edge="end"
+          color="inherit"
+          onClick={onClose}
+          aria-label="close"
+          sx={{ position: "absolute", right: 8, top: 8, color: (theme) => theme.palette.grey[500] }}
+        >
+          <CloseIcon />
+        </IconButton>
+      </DialogTitle>
+      <DialogContent>
+        <Box sx={{ display: "flex", alignItems: "center", marginBottom: "20px" }}>
+          <img
+            src={startup.logo || DefaultLogo}
+            alt={startup.startupName}
+            style={{ width: "100px", height: "100px", borderRadius: "10px" }}
+          />
+          <Typography variant="h6" sx={{ marginLeft: "20px" }}>{startup.startupName}</Typography>
+        </Box>
+
+        <Typography variant="body1" sx={{ marginBottom: "10px" }}>
+          <BusinessIcon sx={{ marginRight: "5px" }} /> Industry: {startup.industry}
+        </Typography>
+        <Typography variant="body1" sx={{ marginBottom: "10px" }}>
+          <BusinessIcon sx={{ marginRight: "5px" }} /> Sector: {startup.sector}
+        </Typography>
+        <Typography variant="body1" sx={{ marginBottom: "10px" }}>
+          <EmailIcon sx={{ marginRight: "5px" }} /> Email: {startup.email}
+        </Typography>
+        <Typography variant="body1" sx={{ marginBottom: "10px" }}>
+          <PhoneIcon sx={{ marginRight: "5px" }} /> Mobile: {startup.mobile}
+        </Typography>
+        <Typography variant="body1" sx={{ marginBottom: "10px" }}>
+          <WebIcon sx={{ marginRight: "5px" }} /> Website: <a href={startup.website} target="_blank" rel="noopener noreferrer">{startup.website}</a>
+        </Typography>
+        <Typography variant="body1">
+          <AppIcon sx={{ marginRight: "5px" }} /> App: <a href={startup.app} target="_blank" rel="noopener noreferrer">{startup.app}</a>
+        </Typography>
+      </DialogContent>
+    </Dialog>
+  );
+};
+
+// Main Page Component
 const StartupApprovalPage = () => {
   const [startups, setStartups] = useState([]);
   const [approvedCount, setApprovedCount] = useState(0);
   const [pendingCount, setPendingCount] = useState(0);
   const [rejectedCount, setRejectedCount] = useState(0);
+  const [selectedStartup, setSelectedStartup] = useState(null);
+  const [popupOpen, setPopupOpen] = useState(false);
 
   // Fetch startups from the API
   useEffect(() => {
@@ -39,6 +99,16 @@ const StartupApprovalPage = () => {
     setApprovedCount(approved);
     setPendingCount(pending);
     setRejectedCount(rejected);
+  };
+
+  const handleViewDetails = (startup) => {
+    setSelectedStartup(startup);
+    setPopupOpen(true);
+  };
+
+  const handleClosePopup = () => {
+    setPopupOpen(false);
+    setSelectedStartup(null);
   };
 
   return (
@@ -73,45 +143,63 @@ const StartupApprovalPage = () => {
 
       {/* Startup List */}
       <Box sx={{ borderRadius: "5px", padding: "20px", backgroundColor: "#fff", boxShadow: 1 }}>
+        <Typography variant="h6" sx={{ marginBottom: "20px" }}>Startups</Typography>
         {startups.map((startup) => (
           <Box
             key={startup._id}
             sx={{
               display: "flex",
-              justifyContent: "space-between",
               alignItems: "center",
               borderBottom: "1px solid #eee",
               padding: "10px 0",
             }}
           >
-            {/* Startup Information */}
-            <Box>
-              <Typography variant="h6">{startup.startupName}</Typography>
-              <Typography variant="body2" color="textSecondary">
-                {startup.brief}
-              </Typography>
-              <Typography variant="caption" color="textSecondary">
-                {startup.createdAt.substring(0, 10)}
-              </Typography>
+            {/* Logo & Name */}
+            <Box sx={{ display: "flex", alignItems: "center", width: "30%" }}>
+              <img
+                src={startup.logo || DefaultLogo}
+                alt={startup.startupName}
+                style={{ width: "50px", height: "50px", borderRadius: "50%" }}
+              />
+              <Typography variant="h6" sx={{ marginLeft: "10px" }}>{startup.startupName}</Typography>
             </Box>
 
-            {/* Stage and Status */}
-            <Box sx={{ display: "flex", alignItems: "center" }}>
-              <Chip
-                label={startup.stage}
-                size="small"
-                sx={{ marginRight: "10px" }}
-              />
-              <Chip
-                label={startup.status}
-                color={statusColors[startup.status]}
-                size="small"
-                sx={{ marginRight: "20px" }}
-              />
-            </Box>
+            {/* Date Created */}
+            <Typography variant="body2" color="textSecondary" sx={{ width: "20%" }}>
+              {startup.createdAt.substring(0, 10)}
+            </Typography>
+
+            {/* Industry */}
+            <Typography variant="body2" color="textSecondary" sx={{ width: "20%" }}>
+              {startup.industry}
+            </Typography>
+
+            {/* Stage */}
+            <Chip
+              label={startup.stage}
+              size="small"
+              sx={{ marginRight: "10px", width: "20%" }}
+            />
+
+            {/* Status */}
+            <Chip
+              label={startup.status}
+              color={statusColors[startup.status]}
+              size="small"
+              sx={{ marginRight: "20px" }}
+            />
 
             {/* Action Buttons */}
-            <Box>
+            <Box sx={{ width: "10%" }}>
+              <Button
+                variant="outlined"
+                size="small"
+                color="info"
+                sx={{ marginRight: "10px" }}
+                onClick={() => handleViewDetails(startup)}
+              >
+                View Details
+              </Button>
               <Button
                 variant="outlined"
                 size="small"
@@ -131,6 +219,9 @@ const StartupApprovalPage = () => {
           </Box>
         ))}
       </Box>
+
+      {/* Detailed Popup */}
+      <StartupDetailsPopup open={popupOpen} onClose={handleClosePopup} startup={selectedStartup} />
     </Box>
   );
 };

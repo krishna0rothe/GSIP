@@ -3,57 +3,46 @@ const StartupApproval = require("../../models/StartupApproval");
 const Startup = require("../../models/Startup"); // Import the Startup model
 const mongoose = require("mongoose");
 
-// Approve a startup
-exports.approveStartup = async (req, res) => {
-  const { startupId, feedback } = req.body;
-
-  // Validate ObjectId
-  if (!mongoose.Types.ObjectId.isValid(startupId)) {
-    return res.status(400).json({ message: 'Invalid startup ID' });
-  }
-
+// Approve or Reject a Startup
+exports.approveOrRejectStartup = async (req, res) => {
   try {
-    // Check if the startup exists
-    const startup = await Startup.findById(startupId);
-    if (!startup) {
-      return res.status(404).json({ message: 'Startup not found' });
+    const { id } = req.params;
+    const { status, feedback } = req.body;
+
+    if (!["Approved", "Rejected"].includes(status)) {
+      return res.status(400).json({ message: "Invalid status" });
     }
 
-    // Create or update approval record
-    const approval = await StartupApproval.findOneAndUpdate(
-      { startupId, approvedBy: req.user.id },
-      { status: 'Approved', feedback, dateApproved: new Date() },
-      { new: true, upsert: true }
+    const startup = await Startup.findByIdAndUpdate(
+      id,
+      {
+        status,
+        feedback,
+        dateApproved: status === "Approved" ? new Date() : null,
+        approvedBy: req.user._id, // Assuming the logged-in user is the policymaker/admin
+      },
+      { new: true } // To return the updated document
     );
 
-    res.status(200).json(approval);
-  } catch (error) {
-    res.status(500).json({ message: 'Server error', error });
-  }
-};
-
-
-// Reject a startup
-exports.rejectStartup = async (req, res) => {
-  const { startupId, feedback } = req.body;
-
-  try {
-    // Check if the startup exists
-    const startup = await Startup.findById(startupId);
     if (!startup) {
       return res.status(404).json({ message: "Startup not found" });
     }
 
-    // Create or update approval record
-    const approval = await StartupApproval.findOneAndUpdate(
-      { startupId, approvedBy: req.user.id },
-      { status: "Rejected", feedback, dateApproved: new Date() },
-      { new: true, upsert: true }
-    );
-
-    res.status(200).json(approval);
+    res.status(200).json(startup);
   } catch (error) {
-    res.status(500).json({ message: "Server error", error });
+    res.status(400).json({ message: error.message });
+  }
+};
+
+
+// Get List of Startups by Approval Status (Approved/Pending/Rejected)
+exports.getStartupsByStatus = async (req, res) => {
+  try {
+    const { status } = req.params; // Status will be "Approved", "Pending", or "Rejected"
+    const startups = await Startup.find({ status });
+    res.status(200).json(startups);
+  } catch (error) {
+    res.status(400).json({ message: error.message });
   }
 };
 
