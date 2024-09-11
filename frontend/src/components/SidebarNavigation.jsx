@@ -3,9 +3,10 @@ import { Box, Typography, List, ListItem, ListItemIcon, ListItemText, CssBaselin
 import { Home as HomeIcon, Assignment as AssignmentIcon, BarChart as BarChartIcon, People as PeopleIcon, Settings as SettingsIcon } from "@mui/icons-material";
 import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
 import StartupApprovalPage from "../pages/Dashboard/StartupApprovalPage.jsx"  // Your startup approval page component
+import DashboardHomePage from "../pages/Dashboard/DashboardHomePage.jsx";
 
 const SidebarNavigation = () => {
-  const menuItems = [
+  const menuItems = [ 
     { text: "Dashboard", icon: <HomeIcon />, path: "/" },
     { text: "Startup Approvals", icon: <AssignmentIcon />, path: "/startups/approval" },
     { text: "Resource Management", icon: <BarChartIcon />, path: "/resource-management" },
@@ -48,13 +49,12 @@ const SidebarNavigation = () => {
             p: 3,
             backgroundColor: "#f9f9f9",
             minHeight: "100vh",
-            paddingTop: "80px",
+            paddingTop: "10px",
           }}
         >
           <Routes>
-            <Route path="/" element={<Typography>Welcome to the Dashboard</Typography>} />
             <Route path="/startups/approval" element={<StartupApprovalPage />} />
-            {/* Add more routes here */}
+            <Route path="/" element={<DashboardHomePage />} />
           </Routes>
         </Box>
       </Box>
