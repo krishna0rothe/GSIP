@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import apiConfig from '../../config/apiConfig.js';
 import {
   Box,
   Typography,
@@ -18,7 +19,6 @@ import {
 import { CheckCircle, Pending, Cancel } from '@mui/icons-material';
 import StartupDetailsPopup from '../../components/StartupDetailsPopup.jsx'; // Ensure this is your Popup component path
 
-const apiBaseUrl = '/api'; // Replace with your actual API base URL
 
 const statusColors = {
   Approved: 'success',
@@ -40,11 +40,11 @@ export default function StartupApprovalPage() {
 
   useEffect(() => {
     fetchStartups();
-  });
+  },[]);
 
   const fetchStartups = async () => {
     try {
-      const response = await fetch(`${apiBaseUrl}/startups`);
+      const response = await fetch(`${apiConfig.baseURL}/api/startups`);
       if (!response.ok) throw new Error('Failed to fetch startups');
       const data = await response.json();
       setStartups(data);
@@ -67,7 +67,7 @@ export default function StartupApprovalPage() {
 
   const handleStatusUpdate = async (startupId, newStatus) => {
     try {
-      const response = await fetch(`${apiBaseUrl}/startups/${startupId}/status`, {
+      const response = await fetch(`${apiConfig.baseURL}/startups/${startupId}/status`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ status: newStatus, feedback: '' }),

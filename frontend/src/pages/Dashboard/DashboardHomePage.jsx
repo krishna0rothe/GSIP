@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import apiConfig from "../../config/apiConfig";
 import {
   Box,
   Typography,
@@ -32,7 +33,6 @@ const statusColors = {
   Rejected: "error",
 };
 
-const apiBaseURL = "http://localhost:5000/api"; // Your actual API base URL
 
 export default function DashboardHomePage() {
   const [startups, setStartups] = useState([]);
@@ -58,7 +58,7 @@ export default function DashboardHomePage() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const startupsResponse = await fetch(`${apiBaseURL}/startups`);
+        const startupsResponse = await fetch(`${apiConfig.baseURL}/api/startups`);
         if (!startupsResponse.ok) {
           throw new Error("Network response was not ok");
         }
@@ -138,7 +138,7 @@ export default function DashboardHomePage() {
               <TableHead>
                 <TableRow>
                   <TableCell>Logo</TableCell>
-                  <TableCell>Name</TableCell>
+                     <TableCell>Name</TableCell>
                   <TableCell>Date Created</TableCell>
                   <TableCell>Industry</TableCell>
                   <TableCell>Stage</TableCell>

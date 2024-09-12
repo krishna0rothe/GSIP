@@ -4,10 +4,6 @@ import { Home as HomeIcon, Assignment as AssignmentIcon, BarChart as BarChartIco
 import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
 import StartupApprovalPage from "../pages/Dashboard/StartupApprovalPage.jsx"  // Your startup approval page component
 import DashboardHomePage from "../pages/Dashboard/DashboardHomePage.jsx";
-import ResourceManagementPage from "../pages/Dashboard/ResourceManagementPage.jsx";
-import MentorAssignmentsPage from "../pages/Dashboard/MentorAssignmentsPage.jsx";
-import DataInsightsPage from "../pages/Dashboard/DataInsightsPage.jsx";
-import SettingsPage from "../pages/Dashboard/SettingsPage.jsx";
 
 const SidebarNavigation = () => {
   const menuItems = [
@@ -59,10 +55,6 @@ const SidebarNavigation = () => {
           <Routes>
             <Route path="/startups/approval" element={<StartupApprovalPage />} />
             <Route path="/" element={<DashboardHomePage />} />
-            <Route path="/resource-management" element={<ResourceManagementPage />} />
-            <Route path="/mentor-assignments" element={<MentorAssignmentsPage />} />
-            <Route path="/data-insights" element={<DataInsightsPage />} />  
-            <Route path="/settings" element={<SettingsPage />} />
           </Routes>
         </Box>
       </Box>
