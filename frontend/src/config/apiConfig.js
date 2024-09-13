@@ -1,5 +1,5 @@
 const apiConfig = {
-  baseURL: "https://3g74bttj-5000.inc1.devtunnels.ms",
+  baseURL: "http://localhost:5000",
 };
 
 export default apiConfig;
