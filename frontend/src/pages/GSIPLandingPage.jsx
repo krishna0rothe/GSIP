@@ -68,7 +68,7 @@ export default function GSIPLandingPage({ theme = "default" }) {
             <span className="logo-text">GSIP</span>
           </div>
           <nav>
-            <ul>
+            <ul className="nav-list">
               {[
                 "Home",
                 "About",
@@ -102,7 +102,9 @@ export default function GSIPLandingPage({ theme = "default" }) {
             growth
           </p>
           <div className="hero-cta">
+            < Link to="/startup/home" >
             <button className="btn btn-primary btn-large">Get Started</button>
+            </Link>
             <button className="btn btn-secondary btn-large">Learn More</button>
           </div>
         </div>
@@ -111,7 +113,7 @@ export default function GSIPLandingPage({ theme = "default" }) {
 
       <section className="about" id="about">
         <div className="container">
-          <h2>What is Gujarat Startups & Innovation Platform?</h2>
+          <h2>What is Gujarat Startups & Innovation Portal?</h2>
           <p>
             We are a one-stop solution for startups, researchers, investors, and
             policymakers. Our platform connects brilliant minds with the
@@ -459,9 +461,11 @@ export default function GSIPLandingPage({ theme = "default" }) {
           </p>
           <div className="cta-buttons">
             <button className="btn btn-primary btn-large">Sign Up Now</button>
+            < Link to="/gov/home" >
             <button className="btn btn-secondary btn-large">
               Request a Demo
             </button>
+            </Link>
           </div>
         </div>
       </section>
@@ -572,7 +576,7 @@ export default function GSIPLandingPage({ theme = "default" }) {
 
         /* Header Styles */
         .header {
-          position: fixed;
+          position:fixed;
           top: 0;
           left: 0;
           right: 0;
@@ -583,7 +587,7 @@ export default function GSIPLandingPage({ theme = "default" }) {
           z-index: 1000;
         }
 
-        .header.scrolled {
+        .header.scrolled {  
           padding: 5px 0;
           background-color: rgba(255, 255, 255, 0.95);
         }
@@ -1357,11 +1361,22 @@ export default function GSIPLandingPage({ theme = "default" }) {
         }
 
         /* Responsive Design */
-        @media (max-width: 768px) {
-          .header .container {
-            flex-direction: column;
-            align-items: center;
+        @media (max-width: 768px) { 
+
+          .header {
+            position: relative;
           }
+
+          .nav-list{
+          display: none;
+          }
+
+          // .header .container {
+          //   flex-direction: column;
+          //   align-items: center;
+            
+          // }
+
 
           nav ul {
             margin-top: 20px;
