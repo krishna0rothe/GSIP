@@ -1,245 +1,597 @@
-import React, { useState } from 'react';
-import {
-  AppBar, Toolbar, Typography, IconButton, Avatar, Button, Table, TableBody,
-  TableCell, TableContainer, TableHead, TableRow, Paper, Box, Dialog,
-  DialogTitle, DialogContent, DialogActions, TextField, FormControl,
-  InputLabel, Select, MenuItem, Chip
-} from '@mui/material';
-import { Add, Notifications, Edit, Visibility } from '@mui/icons-material';
-import { createTheme, ThemeProvider } from '@mui/material/styles';
-import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
-import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
-import { DatePicker } from '@mui/x-date-pickers/DatePicker';
+import React, { useState } from 'react'
+import { X, Edit, Trash2, Plus, FileText, AlertCircle, Search, ChevronLeft, ChevronRight } from "lucide-react"
+import { BarChart, Bar, PieChart, Pie, LineChart, Line, XAxis, YAxis, Tooltip, Legend, ResponsiveContainer } from 'recharts'
 
-// Mock GSIP theme (replace with actual theme when available)
-const gsipTheme = createTheme({
-  palette: {
-    primary: {
-      main: '#1976d2',
-    },
-    secondary: {
-      main: '#dc004e',
-    },
-  },
-});
+// Dummy data for IPR filings from Gujarat startups
+const iprFilings = [
+  { id: 'IPR001', title: 'Smart Irrigation System', type: 'Patent', status: 'Approved', filingDate: '2023-03-15', description: 'An AI-powered irrigation system designed for Gujarat\'s arid climate.' },
+  { id: 'IPR002', title: 'GujaratTech', type: 'Trademark', status: 'In Review', filingDate: '2023-05-22', description: 'A trademark for Gujarat\'s emerging tech hub initiative.' },
+  { id: 'IPR003', title: 'Solar-Powered Desalination', type: 'Patent', status: 'Filed', filingDate: '2023-04-10', description: 'Efficient desalination technology for Gujarat\'s coastal regions.' },
+  { id: 'IPR004', title: 'Automated Cotton Picking Robot', type: 'Patent', status: 'Approved', filingDate: '2023-02-28', description: 'Robotic system for efficient cotton harvesting in Gujarat\'s fields.' },
+  { id: 'IPR005', title: 'Gujarat Green Energy', type: 'Trademark', status: 'Rejected', filingDate: '2023-06-05', description: 'Branding for Gujarat\'s renewable energy initiatives.' },
+  // Add more dummy data as needed
+]
 
-const statusColors = {
-  Filed: '#ffa000',
-  'In Review': '#2196f3',
-  Approved: '#4caf50',
-  Rejected: '#f44336'
-};
+const filingTrends = [
+  { month: 'Jan', filings: 2 },
+  { month: 'Feb', filings: 3 },
+  { month: 'Mar', filings: 5 },
+  { month: 'Apr', filings: 4 },
+  { month: 'May', filings: 6 },
+  { month: 'Jun', filings: 4 },
+]
 
-const IPRManagementPage = () => {
-  const [iprFilings, setIprFilings] = useState([
-    { id: 1, type: 'Patent', title: 'AI-Driven Analytics Engine', filingDate: '2024-09-15', status: 'In Review', description: 'An AI-based analytics engine for enhanced data insights.' },
-    { id: 2, type: 'Trademark', title: 'TechInnovate', filingDate: '2024-08-01', status: 'Approved', description: 'A trademark for innovative tech solutions.' },
-    { id: 3, type: 'Patent', title: 'Blockchain-based Security Protocol', filingDate: '2024-07-20', status: 'Filed', description: 'A security protocol using blockchain technology.' },
-  ]);
-  const [openNewFiling, setOpenNewFiling] = useState(false);
-  const [openDetailView, setOpenDetailView] = useState(false);
-  const [selectedFiling, setSelectedFiling] = useState(null);
-  const [newFiling, setNewFiling] = useState({
-    type: '',
-    title: '',
-    description: '',
-    filingDate: null,
-    attachments: null,
-  });
+const filingTypes = [
+  { name: 'Patents', value: 15 },
+  { name: 'Trademarks', value: 8 },
+]
 
-  const handleOpenNewFiling = () => setOpenNewFiling(true);
-  const handleCloseNewFiling = () => setOpenNewFiling(false);
+const approvalStatus = [
+  { status: 'Filed', count: 10 },
+  { status: 'In Review', count: 5 },
+  { status: 'Approved', count: 6 },
+  { status: 'Rejected', count: 2 },
+]
 
-  const handleOpenDetailView = (filing) => {
-    setSelectedFiling(filing);
-    setOpenDetailView(true);
-  };
-  const handleCloseDetailView = () => setOpenDetailView(false);
+export default function IPRManagementPage() {
+  const [selectedIPR, setSelectedIPR] = useState(null)
+  const [isAddingNew, setIsAddingNew] = useState(false)
+  const [searchTerm, setSearchTerm] = useState('')
+  const [currentPage, setCurrentPage] = useState(1)
+  const [sortBy, setSortBy] = useState({ field: 'filingDate', order: 'desc' })
+  const itemsPerPage = 5
 
-  const handleInputChange = (e) => {
-    const { name, value } = e.target;
-    setNewFiling({ ...newFiling, [name]: value });
-  };
+  const filteredIPR = iprFilings.filter(ipr => 
+    ipr.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    ipr.id.toLowerCase().includes(searchTerm.toLowerCase())
+  ).sort((a, b) => {
+    if (a[sortBy.field] < b[sortBy.field]) return sortBy.order === 'asc' ? -1 : 1
+    if (a[sortBy.field] > b[sortBy.field]) return sortBy.order === 'asc' ? 1 : -1
+    return 0
+  })
 
-  const handleDateChange = (date) => {
-    setNewFiling({ ...newFiling, filingDate: date });
-  };
+  const pageCount = Math.ceil(filteredIPR.length / itemsPerPage)
+  const paginatedIPR = filteredIPR.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage)
 
-  const handleFileChange = (e) => {
-    setNewFiling({ ...newFiling, attachments: e.target.files[0] });
-  };
+  const handleSort = (field) => {
+    setSortBy(prev => ({
+      field,
+      order: prev.field === field && prev.order === 'asc' ? 'desc' : 'asc'
+    }))
+  }
 
-  const handleSubmitNewFiling = () => {
-    const newId = iprFilings.length + 1;
-    const newIpr = {
-      ...newFiling,
-      id: newId,
-      status: 'Filed',
-      filingDate: newFiling.filingDate.toISOString().split('T')[0],
-    };
-    setIprFilings([...iprFilings, newIpr]);
-    handleCloseNewFiling();
-    setNewFiling({
-      type: '',
-      title: '',
-      description: '',
-      filingDate: null,
-      attachments: null,
-    });
-  };
+  const openDetailView = (ipr) => {
+    setSelectedIPR(ipr)
+  }
+
+  const closeDetailView = () => {
+    setSelectedIPR(null)
+  }
+
+  const handleAddNew = (e) => {
+    e.preventDefault()
+    // In a real application, you would handle the form submission here
+    setIsAddingNew(false)
+    // Add success notification logic here
+  }
+
+  const handleEdit = (e) => {
+    e.preventDefault()
+    // In a real application, you would handle the form submission here
+    setSelectedIPR(null)
+    // Add success notification logic here
+  }
+
+  const handleDelete = () => {
+    // In a real application, you would handle the deletion here
+    setSelectedIPR(null)
+    // Add success notification logic here
+  }
 
   return (
-    <ThemeProvider theme={gsipTheme}>
-      <Box sx={{ flexGrow: 1 }}>
-        <AppBar position="static">
-          <Toolbar>
-            <img src="/api/placeholder/40/40" alt="GSIP Logo" style={{ marginRight: '16px' }} />
-            <Typography variant="h6" component="div" sx={{ flexGrow: 1, textAlign: 'center' }}>
-              IPR Management
-            </Typography>
-            <IconButton color="inherit">
-              <Notifications />
-            </IconButton>
-            <Avatar sx={{ marginLeft: 1 }}>U</Avatar>
-          </Toolbar>
-        </AppBar>
+    <div className="ipr-management">
+      <main className="main-content">
+        <section className="overview">
+          <h1>IPR Management Dashboard</h1>
+          <div className="metrics">
+            <div className="metric">
+              <span className="metric-value">{iprFilings.length}</span>
+              <span className="metric-label">Total Filings</span>
+            </div>
+            <div className="metric">
+              <span className="metric-value">{iprFilings.filter(ipr => ipr.status === 'Approved').length}</span>
+              <span className="metric-label">Approved</span>
+            </div>
+            <div className="metric">
+              <span className="metric-value">{iprFilings.filter(ipr => ipr.status === 'In Review').length}</span>
+              <span className="metric-label">In Review</span>
+            </div>
+            <div className="metric">
+              <span className="metric-value">{iprFilings.filter(ipr => ipr.status === 'Filed').length}</span>
+              <span className="metric-label">Filed</span>
+            </div>
+          </div>
+        </section>
 
-        <Box sx={{ padding: 3 }}>
-          <Box sx={{ display: 'flex', justifyContent: 'flex-end', marginBottom: 2 }}>
-            <Button
-              variant="contained"
-              color="primary"
-              startIcon={<Add />}
-              onClick={handleOpenNewFiling}
-            >
-              Submit New IPR Filing
-            </Button>
-          </Box>
-
-          <TableContainer component={Paper}>
-            <Table>
-              <TableHead>
-                <TableRow>
-                  <TableCell>IPR Type</TableCell>
-                  <TableCell>Title/Name</TableCell>
-                  <TableCell align="right">Filing Date</TableCell>
-                  <TableCell align="center">Status</TableCell>
-                  <TableCell align="center">Actions</TableCell>
-                </TableRow>
-              </TableHead>
-              <TableBody>
-                {iprFilings.map((filing) => (
-                  <TableRow key={filing.id} sx={{ '&:nth-of-type(odd)': { backgroundColor: '#f5f5f5' } }}>
-                    <TableCell>{filing.type}</TableCell>
-                    <TableCell>{filing.title}</TableCell>
-                    <TableCell align="right">{filing.filingDate}</TableCell>
-                    <TableCell align="center">
-                      <Chip
-                        label={filing.status}
-                        sx={{
-                          backgroundColor: statusColors[filing.status],
-                          color: 'white',
-                        }}
-                      />
-                    </TableCell>
-                    <TableCell align="center">
-                      <IconButton color="primary" onClick={() => handleOpenDetailView(filing)}>
-                        <Visibility />
-                      </IconButton>
-                      <IconButton color="secondary">
-                        <Edit />
-                      </IconButton>
-                    </TableCell>
-                  </TableRow>
-                ))}
-              </TableBody>
-            </Table>
-          </TableContainer>
-        </Box>
-
-        {/* New IPR Filing Dialog */}
-        <Dialog open={openNewFiling} onClose={handleCloseNewFiling}>
-          <DialogTitle>Submit New IPR Filing</DialogTitle>
-          <DialogContent>
-            <FormControl fullWidth margin="dense">
-              <InputLabel>IPR Type</InputLabel>
-              <Select
-                name="type"
-                value={newFiling.type}
-                onChange={handleInputChange}
-                label="IPR Type"
-              >
-                <MenuItem value="Patent">Patent</MenuItem>
-                <MenuItem value="Trademark">Trademark</MenuItem>
-              </Select>
-            </FormControl>
-            <TextField
-              margin="dense"
-              name="title"
-              label="Title/Name"
-              type="text"
-              fullWidth
-              variant="outlined"
-              value={newFiling.title}
-              onChange={handleInputChange}
-            />
-            <TextField
-              margin="dense"
-              name="description"
-              label="Description"
-              type="text"
-              fullWidth
-              variant="outlined"
-              multiline
-              rows={4}
-              value={newFiling.description}
-              onChange={handleInputChange}
-            />
-            <LocalizationProvider dateAdapter={AdapterDateFns}>
-              <DatePicker
-                label="Filing Date"
-                value={newFiling.filingDate}
-                onChange={handleDateChange}
-                renderInput={(params) => <TextField {...params} fullWidth margin="dense" />}
+        <section className="ipr-table">
+          <div className="table-header">
+            <div className="search-bar">
+              <Search className="icon" />
+              <input 
+                type="text" 
+                placeholder="Search IPR filings..." 
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
               />
-            </LocalizationProvider>
-            <input
-              accept="application/pdf"
-              style={{ display: 'none' }}
-              id="raised-button-file"
-              type="file"
-              onChange={handleFileChange}
-            />
-            <label htmlFor="raised-button-file">
-              <Button variant="outlined" component="span" sx={{ mt: 2 }}>
-                Upload Attachment
-              </Button>
-            </label>
-            {newFiling.attachments && <Typography variant="body2" sx={{ mt: 1 }}>{newFiling.attachments.name}</Typography>}
-          </DialogContent>
-          <DialogActions>
-            <Button onClick={handleCloseNewFiling}>Cancel</Button>
-            <Button onClick={handleSubmitNewFiling} variant="contained" color="primary">Submit</Button>
-          </DialogActions>
-        </Dialog>
+            </div>
+            <button className="button button-primary" onClick={() => setIsAddingNew(true)}>
+              <Plus className="icon" /> Add New Filing
+            </button>
+          </div>
+          <table>
+            <thead>
+              <tr>
+                <th onClick={() => handleSort('id')}>Filing ID</th>
+                <th onClick={() => handleSort('title')}>Title</th>
+                <th onClick={() => handleSort('type')}>Type</th>
+                <th onClick={() => handleSort('status')}>Status</th>
+                <th onClick={() => handleSort('filingDate')}>Date Filed</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              {paginatedIPR.map((filing) => (
+                <tr key={filing.id}>
+                  <td>{filing.id}</td>
+                  <td>{filing.title}</td>
+                  <td>{filing.type}</td>
+                  <td>
+                    <span className={`status status-${filing.status.toLowerCase()}`}>
+                      {filing.status}
+                    </span>
+                  </td>
+                  <td>{filing.filingDate}</td>
+                  <td>
+                    <button className="button button-secondary" onClick={() => openDetailView(filing)}>
+                      View Details
+                    </button>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+          <div className="pagination">
+            <button 
+              onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
+              disabled={currentPage === 1}
+            >
+              <ChevronLeft className="icon" />
+            </button>
+            <span>{currentPage} of {pageCount}</span>
+            <button 
+              onClick={() => setCurrentPage(prev => Math.min(prev + 1, pageCount))}
+              disabled={currentPage === pageCount}
+            >
+              <ChevronRight className="icon" />
+            </button>
+          </div>
+        </section>
 
-        {/* Detail View Dialog */}
-        <Dialog open={openDetailView} onClose={handleCloseDetailView}>
-          <DialogTitle>{selectedFiling?.title}</DialogTitle>
-          <DialogContent>
-            <Typography><strong>IPR Type:</strong> {selectedFiling?.type}</Typography>
-            <Typography><strong>Filing Date:</strong> {selectedFiling?.filingDate}</Typography>
-            <Typography><strong>Status:</strong> {selectedFiling?.status}</Typography>
-            <Typography sx={{ mt: 2 }}><strong>Description:</strong></Typography>
-            <Typography>{selectedFiling?.description || 'No description provided.'}</Typography>
-          </DialogContent>
-          <DialogActions>
-            <Button onClick={handleCloseDetailView}>Close</Button>
-          </DialogActions>
-        </Dialog>
-      </Box>
-    </ThemeProvider>
-  );
-};
+        <section className="charts">
+          <div className="chart">
+            <h3>Filing Trends</h3>
+            <ResponsiveContainer width="100%" height={200}>
+              <LineChart data={filingTrends}>
+                <XAxis dataKey="month" />
+                <YAxis />
+                <Tooltip />
+                <Line type="monotone" dataKey="filings" stroke="#8884d8" />
+              </LineChart>
+            </ResponsiveContainer>
+          </div>
+          <div className="chart">
+            <h3>Filing Types</h3>
+            <ResponsiveContainer width="100%" height={200}>
+              <PieChart>
+                <Pie data={filingTypes} dataKey="value" nameKey="name" cx="50%" cy="50%" outerRadius={80} fill="#8884d8" label />
+                <Tooltip />
+              </PieChart>
+            </ResponsiveContainer>
+          </div>
+          <div className="chart">
+            <h3>Approval Status</h3>
+            <ResponsiveContainer width="100%" height={200}>
+              <BarChart data={approvalStatus}>
+                <XAxis dataKey="status" />
+                <YAxis />
+                <Tooltip />
+                <Bar dataKey="count" fill="#8884d8" />
+              </BarChart>
+            </ResponsiveContainer>
+          </div>
+        </section>
+      </main>
 
-export default IPRManagementPage;
+      {selectedIPR && (
+        <div className="modal-overlay">
+          <div className="modal">
+            <button className="close-button" onClick={closeDetailView}>
+              <X className="icon" />
+            </button>
+            <h2>IPR Filing Details</h2>
+            <div className="ipr-details">
+              <p><strong>Filing ID:</strong> {selectedIPR.id}</p>
+              <p><strong>Title:</strong> {selectedIPR.title}</p>
+              <p><strong>Type:</strong> {selectedIPR.type}</p>
+              <p><strong>Status:</strong> 
+                <span className={`status status-${selectedIPR.status.toLowerCase()}`}>
+                  {selectedIPR.status}
+                </span>
+              </p>
+              <p><strong>Description:</strong> {selectedIPR.description}</p>
+              <p><strong>Filing Date:</strong> {selectedIPR.filingDate}</p>
+              <p><strong>Next Steps:</strong> Follow up with legal team for further processing.</p>
+              <p><strong>Attached Documents:</strong> application_form.pdf, correspondence.pdf</p>
+            </div>
+            <div className="modal-actions">
+              <button className="button button-secondary" onClick={() => {/* Implement edit logic */}}>
+                <Edit className="icon" /> Edit Filing
+              </button>
+              <button className="button button-danger" onClick={handleDelete}>
+                <Trash2 className="icon" /> Delete Filing
+              </button>
+              <button className="button button-secondary">
+                <FileText className="icon" /> Attach Document
+              </button>
+              <button className="button button-secondary">
+                Contact Legal Advisor
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {isAddingNew && (
+        <div className="modal-overlay">
+          <div className="modal">
+            <button className="close-button" onClick={() => setIsAddingNew(false)}>
+              <X className="icon" />
+            </button>
+            <h2>Add New IPR Filing</h2>
+            <form onSubmit={handleAddNew}>
+              <div className="form-group">
+                <label htmlFor="title">Title</label>
+                <input type="text" id="title" required />
+              </div>
+              <div className="form-group">
+                <label htmlFor="type">Type</label>
+                <select id="type" required>
+                  <option value="">Select Type</option>
+                  <option value="Patent">Patent</option>
+                  <option value="Trademark">Trademark</option>
+                </select>
+              </div>
+              <div className="form-group">
+                <label htmlFor="description">Description</label>
+                <textarea id="description" required></textarea>
+              </div>
+              <div className="form-group">
+                <label htmlFor="filingDate">Date Filed</label>
+                <input type="date" id="filingDate" required />
+              </div>
+              <div className="form-group">
+                <label htmlFor="documents">Upload Documents</label>
+                <input type="file" id="documents" multiple />
+              </div>
+              <div className="modal-actions">
+                <button type="submit" className="button button-primary">Submit Filing</button>
+                <button type="button" className="button button-secondary" onClick={() => setIsAddingNew(false)}>Cancel</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
+
+      <style jsx>{`
+        .ipr-management {
+          font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+          background-color: #f8f9fa;
+          min-height: 100vh;
+          padding: 24px;
+          color: #333;
+        }
+
+        .main-content {
+          max-width: 1200px;
+          margin: 0 auto;
+        }
+
+        h1 {
+          font-size: 24px;
+          font-weight: bold;
+          margin-bottom: 24px;
+          color: #1a202c;
+        }
+
+        .metrics {
+          display: flex;
+          justify-content: space-between;
+          margin-bottom: 24px;
+        }
+
+        .metric {
+          background-color: white;
+          border-radius: 8px;
+          padding: 16px;
+          text-align: center;
+          box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+          flex: 1;
+          margin-right: 16px;
+        }
+
+        .metric:last-child {
+          margin-right: 0;
+        }
+
+        .metric-value {
+          font-size: 24px;
+          font-weight: bold;
+          color: #3B82F6;
+          display: block;
+        }
+
+        .metric-label {
+          font-size: 14px;
+          color: #6B7280;
+        }
+
+        .table-header {
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          margin-bottom: 16px;
+        }
+
+        .search-bar {
+          display: flex;
+          align-items: center;
+          background-color: white;
+          border-radius: 4px;
+          padding: 8px 12px;
+          box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        }
+
+        .search-bar input {
+          border: none;
+          outline: none;
+          margin-left: 8px;
+          font-size: 14px;
+        }
+
+        table {
+          width: 100%;
+          border-collapse: separate;
+          border-spacing: 0;
+          background-color: white;
+          border-radius: 8px;
+          overflow: hidden;
+          box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        }
+
+        th, td {
+          padding: 12px 16px;
+          text-align: left;
+        }
+
+        th {
+          background-color: #F3F4F6;
+          font-weight: bold;
+          color: #4B5563;
+          cursor: pointer;
+        }
+
+        th:hover {
+          background-color: #E5E7EB;
+        }
+
+        tr:nth-child(even) {
+          background-color: #F9FAFB;
+        }
+
+        .status {
+          font-size: 12px;
+          font-weight: bold;
+          padding: 4px 8px;
+          border-radius: 12px;
+        }
+
+        .status-approved {
+          background-color: #D1FAE5;
+          color: #065F46;
+        }
+
+        .status-in-review {
+          background-color: #FEF3C7;
+          color: #92400E;
+        }
+
+        .status-filed {
+          background-color: #DBEAFE;
+          color: #1E40AF;
+        }
+
+        .status-rejected {
+          background-color: #FEE2E2;
+          color: #991B1B;
+        }
+
+        .pagination {
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          margin-top: 16px;
+        }
+
+        .pagination button {
+          background: none;
+          border: none;
+          cursor: pointer;
+          padding: 4px;
+        }
+
+        .pagination span {
+          margin: 0 16px;
+        }
+
+        .charts {
+          display: grid;
+          grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+          gap: 24px;
+          margin-top: 24px;
+        }
+
+        .chart {
+          background-color: white;
+          border-radius: 8px;
+          padding: 16px;
+          box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        }
+
+        .chart h3 {
+          font-size: 16px;
+          font-weight: bold;
+          margin-bottom: 16px;
+          color: #4B5563;
+        }
+
+        .modal-overlay {
+          position: fixed;
+          top: 0;
+          left: 0;
+          right: 0;
+          bottom: 0;
+          background-color: rgba(0, 0, 0, 0.5);
+          display: flex;
+          justify-content: center;
+          align-items: center;
+        }
+
+        .modal {
+          background-color: white;
+          border-radius: 8px;
+          padding: 24px;
+          width: 500px;
+          max-width: 90%;
+          max-height: 90%;
+          overflow-y: auto;
+          position: relative;
+        }
+
+        .close-button {
+          position: absolute;
+          top: 16px;
+          right: 16px;
+          background: none;
+          border: none;
+          cursor: pointer;
+          font-size: 24px;
+          color: #6B7280;
+        }
+
+        .modal h2 {
+          font-size: 20px;
+          font-weight: bold;
+          margin-bottom: 16px;
+          color: #1a202c;
+        }
+
+        .ipr-details p {
+          margin-bottom: 8px;
+        }
+
+        .modal-actions {
+          display: flex;
+          justify-content: flex-end;
+          margin-top: 24px;
+        }
+
+        .button {
+          display: inline-flex;
+          align-items: center;
+          justify-content: center;
+          padding: 8px 16px;
+          border-radius: 4px;
+          font-size: 14px;
+          font-weight: bold;
+          cursor: pointer;
+          transition: background-color 0.3s;
+        }
+
+        .button-primary {
+          background-color: #3B82F6;
+          color: white;
+          border: none;
+        }
+
+        .button-primary:hover {
+          background-color: #2563EB;
+        }
+
+        .button-secondary {
+          background-color: #E5E7EB;
+          color: #374151;
+          border: none;
+          margin-left: 8px;
+        }
+
+        .button-secondary:hover {
+          background-color: #D1D5DB;
+        }
+
+        .button-danger {
+          background-color: #EF4444;
+          color: white;
+          border: none;
+          margin-left: 8px;
+        }
+
+        .button-danger:hover {
+          background-color: #DC2626;
+        }
+
+        .icon {
+          width: 16px;
+          height: 16px;
+          margin-right: 8px;
+        }
+
+        .form-group {
+          margin-bottom: 16px;
+        }
+
+        label {
+          display: block;
+          margin-bottom: 4px;
+          font-weight: bold;
+          color: #4B5563;
+        }
+
+        input[type="text"],
+        input[type="date"],
+        select,
+        textarea {
+          width: 100%;
+          padding: 8px;
+          border: 1px solid #D1D5DB;
+          border-radius: 4px;
+          font-size: 14px;
+        }
+
+        textarea {
+          height: 100px;
+          resize: vertical;
+        }
+      `}</style>
+    </div>
+  )
+}

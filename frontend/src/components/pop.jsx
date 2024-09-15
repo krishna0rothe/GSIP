@@ -31,6 +31,7 @@ export default function StartupDetailsPopup({
   };
 
   const handleAskMoreInfo = () => {
+    // Implement the logic to ask for more information
     console.log("Asking for more information about", startup.startupName);
   };
 
@@ -125,13 +126,9 @@ export default function StartupDetailsPopup({
               Services
             </Typography>
             <Box sx={{ display: "flex", flexWrap: "wrap", gap: 1 }}>
-              {startup.services && startup.services.length > 0 ? (
-                startup.services.map((service, index) => (
-                  <Chip key={index} label={service} size="small" />
-                ))
-              ) : (
-                <Typography>No services listed</Typography>
-              )}
+              {startup.services.map((service, index) => (
+                <Chip key={index} label={service} size="small" />
+              ))}
             </Box>
           </Grid>
           <Grid item xs={12} sm={6}>
@@ -139,14 +136,13 @@ export default function StartupDetailsPopup({
               Legal Information
             </Typography>
             <Typography>
-              <strong>Udyog Aadhar:</strong> {startup.udyogAadhar || "N/A"}
+              <strong>Udyog Aadhar:</strong> {startup.udyogAadhar}
             </Typography>
             <Typography>
-              <strong>Nature of Entity:</strong>{" "}
-              {startup.natureOfEntity || "N/A"}
+              <strong>Nature of Entity:</strong> {startup.natureOfEntity}
             </Typography>
             <Typography>
-              <strong>PAN Number:</strong> {startup.PANNumber || "N/A"}
+              <strong>PAN Number:</strong> {startup.PANNumber}
             </Typography>
           </Grid>
           <Grid item xs={12} sm={6}>
@@ -154,13 +150,9 @@ export default function StartupDetailsPopup({
               Interests
             </Typography>
             <Box sx={{ display: "flex", flexWrap: "wrap", gap: 1 }}>
-              {startup.interests && startup.interests.length > 0 ? (
-                startup.interests.map((interest, index) => (
-                  <Chip key={index} label={interest} size="small" />
-                ))
-              ) : (
-                <Typography>No interests listed</Typography>
-              )}
+              {startup.interests.map((interest, index) => (
+                <Chip key={index} label={interest} size="small" />
+              ))}
             </Box>
           </Grid>
         </Grid>

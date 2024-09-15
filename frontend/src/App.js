@@ -12,7 +12,9 @@ import SettingsPage from "./pages/Dashboard/SettingsPage";
 import StartupDashboard from "./pages/StartupDashboard/StartupDashboard";
 import FundingRequestsPage from "./pages/StartupDashboard/FundingRequestsPage";
 import IPRManagementPage from "./pages/StartupDashboard/IPRManagementPage";
-import HomePage from "./pages/home/HomePage";
+import StartupSettingsPage from "./pages/StartupDashboard/StartupSettingsPage";
+import StartupMentorshipPage from "./pages/StartupDashboard/MentorshipPage";
+import HomePage from "./pages/GSIPLandingPage";
 
 function App() {
   return (
@@ -20,7 +22,7 @@ function App() {
       <Router>
         <Routes>
           {/* Group all gov-related routes under MainLayout */}
-          <Route path="/" element={<HomePage />} />
+          <Route path="/" element={< HomePage />} />
         </Routes>
           <Routes>
           {/* Group all gov-related routes under MainLayout */}
@@ -46,6 +48,8 @@ function App() {
             <Route path="home" element={<StartupDashboard />} />
             <Route path="funding" element={<FundingRequestsPage />} />
             <Route path="ipr" element={<IPRManagementPage />} />
+            <Route path="settings" element={<StartupSettingsPage />} />
+            <Route path="mentorship" element={<StartupMentorshipPage />} />
             {/* Add your startup-specific pages here */}
           </Route>
 
